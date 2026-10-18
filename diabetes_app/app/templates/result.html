@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Result{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+  <div>
+    <h1 class="h3 mb-1">Your result</h1>
+    <div class="text-muted small">{{ record.created_at|datefmt }}</div>
+  </div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-outline-secondary" type="button" onclick="window.print()">Print</button>
+    <a class="btn btn-primary" href="{{ url_for('main.predict_view') }}">New assessment</a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm text-center h-100">
+      <div class="card-body p-4">
+        <div class="gauge mx-auto level-{{ record.risk_level|lower }}" style="--value: {{ record.probability_pct }}">
+          <span>{{ record.probability_pct }}%</span>
+        </div>
+        <div class="mt-3">
+          <span class="badge text-bg-{{ record.level_class }} fs-6">{{ record.risk_level }} risk</span>
+        </div>
+        <p class="text-muted small mt-3 mb-0">
+          Model classification: <strong>{{ meta.target_labels[record.predicted_class|string] }}</strong>
+          (decision threshold {{ (meta.threshold * 100)|round|int }}%)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white"><strong>Details you entered</strong></div>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <tbody>
+            <tr><th scope="row">Gender</th><td>{{ record.gender }}</td><th scope="row">Age</th><td>{{ record.age|round(1) }} years</td></tr>
+            <tr><th scope="row">Hypertension</th><td>{{ 'Yes' if record.hypertension else 'No' }}</td><th scope="row">Heart disease</th><td>{{ 'Yes' if record.heart_disease else 'No' }}</td></tr>
+            <tr><th scope="row">Smoking history</th><td>{{ record.smoking_history|smoking_label }}</td><th scope="row">BMI</th><td>{{ record.bmi|round(1) }}</td></tr>
+            <tr><th scope="row">HbA1c</th><td>{{ record.hba1c_level }}%</td><th scope="row">Blood glucose</th><td>{{ record.blood_glucose_level|round|int }} mg/dL</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white"><strong>Recommendations</strong></div>
+      <div class="card-body">
+        {% for category, texts in record.recommendation_groups.items() %}
+        <h2 class="h6 text-uppercase text-muted mt-{{ 0 if loop.first else 3 }}">{{ category }}</h2>
+        <ul>
+          {% for text in texts %}<li class="mb-1">{{ text }}</li>{% endfor %}
+        </ul>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-secondary mt-4 mb-0">
+  This result is an automated screening estimate and is not a diagnosis. Please discuss it with a qualified healthcare professional.
+</div>
+{% endblock %}

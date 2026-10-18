@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Page not found{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+  <div class="display-1 fw-bold text-muted">404</div>
+  <h1 class="h4">Page not found</h1>
+  <p class="text-muted">The page you are looking for does not exist or you do not have access to it.</p>
+  <a class="btn btn-primary" href="{{ url_for('main.index') }}">Go to home</a>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}History{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">Assessment history</h1>
+  <a class="btn btn-primary" href="{{ url_for('main.predict_view') }}">New assessment</a>
+</div>
+
+{% if pagination.items %}
+<div class="card border-0 shadow-sm">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead>
+        <tr><th>Date</th><th>Age</th><th>BMI</th><th>HbA1c</th><th>Glucose</th><th>Risk</th><th>Probability</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for item in pagination.items %}
+        <tr>
+          <td class="text-nowrap">{{ item.created_at|datefmt }}</td>
+          <td>{{ item.age|round(1) }}</td>
+          <td>{{ item.bmi|round(1) }}</td>
+          <td>{{ item.hba1c_level }}</td>
+          <td>{{ item.blood_glucose_level|round|int }}</td>
+          <td><span class="badge text-bg-{{ item.level_class }}">{{ item.risk_level }}</span></td>
+          <td>{{ item.probability_pct }}%</td>
+          <td class="text-end text-nowrap">
+            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('main.result', prediction_id=item.id) }}">Open</a>
+            <form class="d-inline" method="post" action="{{ url_for('main.delete_prediction', prediction_id=item.id) }}" onsubmit="return confirm('Delete this assessment?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if pagination.pages > 1 %}
+<nav class="mt-4" aria-label="History pages">
+  <ul class="pagination justify-content-center">
+    <li class="page-item {{ 'disabled' if not pagination.has_prev }}">
+      <a class="page-link" href="{{ url_for('main.history', page=pagination.prev_num) if pagination.has_prev else '#' }}">Previous</a>
+    </li>
+    {% for number in pagination.iter_pages() %}
+      {% if number %}
+      <li class="page-item {{ 'active' if number == pagination.page }}"><a class="page-link" href="{{ url_for('main.history', page=number) }}">{{ number }}</a></li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">...</span></li>
+      {% endif %}
+    {% endfor %}
+    <li class="page-item {{ 'disabled' if not pagination.has_next }}">
+      <a class="page-link" href="{{ url_for('main.history', page=pagination.next_num) if pagination.has_next else '#' }}">Next</a>
+    </li>
+  </ul>
+</nav>
+{% endif %}
+{% else %}
+<div class="card border-0 shadow-sm">
+  <div class="card-body text-center text-muted py-5">
+    No assessments saved yet.
+    <div class="mt-3"><a class="btn btn-primary" href="{{ url_for('main.predict_view') }}">Start your first assessment</a></div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

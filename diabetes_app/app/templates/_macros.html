@@ -1,0 +1,12 @@
+{% macro field(f, hint=None) %}
+<div class="mb-3">
+  {{ f.label(class="form-label") }}
+  {% if f.type == "SelectField" %}
+    {{ f(class="form-select" ~ (" is-invalid" if f.errors else "")) }}
+  {% else %}
+    {{ f(class="form-control" ~ (" is-invalid" if f.errors else "")) }}
+  {% endif %}
+  {% if hint %}<div class="form-text">{{ hint }}</div>{% endif %}
+  {% for error in f.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+</div>
+{% endmacro %}

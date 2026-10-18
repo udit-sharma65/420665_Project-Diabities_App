@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Server error{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+  <div class="display-1 fw-bold text-muted">500</div>
+  <h1 class="h4">Something went wrong</h1>
+  <p class="text-muted">An unexpected error occurred. Please try again.</p>
+  <a class="btn btn-primary" href="{{ url_for('main.index') }}">Go to home</a>
+</div>
+{% endblock %}

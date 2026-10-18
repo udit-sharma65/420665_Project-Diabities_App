@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}New assessment{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4">New assessment</h1>
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <form method="post" novalidate>
+          {{ form.hidden_tag() }}
+          <div class="row">
+            <div class="col-md-6">{{ field(form.gender) }}</div>
+            <div class="col-md-6">{{ field(form.age) }}</div>
+            <div class="col-md-6">{{ field(form.hypertension) }}</div>
+            <div class="col-md-6">{{ field(form.heart_disease) }}</div>
+            <div class="col-md-6">{{ field(form.smoking_history) }}</div>
+            <div class="col-md-6">{{ field(form.bmi) }}</div>
+            <div class="col-md-6">{{ field(form.hba1c_level) }}</div>
+            <div class="col-md-6">{{ field(form.blood_glucose_level) }}</div>
+          </div>
+          <button class="btn btn-primary btn-lg" type="submit">Get my result</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body">
+        <h2 class="h6">BMI calculator</h2>
+        <div class="row g-2 mb-2">
+          <div class="col-6"><input id="height-cm" type="number" min="50" max="250" step="any" class="form-control form-control-sm" placeholder="Height (cm)"></div>
+          <div class="col-6"><input id="weight-kg" type="number" min="10" max="400" step="any" class="form-control form-control-sm" placeholder="Weight (kg)"></div>
+        </div>
+        <button id="bmi-apply" type="button" class="btn btn-outline-primary btn-sm">Calculate and fill BMI</button>
+        <div id="bmi-output" class="small text-muted mt-2"></div>
+      </div>
+    </div>
+    <div class="card border-0 shadow-sm">
+      <div class="card-body small text-muted">
+        <h2 class="h6 text-body">Good to know</h2>
+        <ul class="ps-3 mb-0">
+          <li>HbA1c and blood glucose come from a laboratory blood test.</li>
+          <li>Blood glucose is entered in mg/dL.</li>
+          <li>The accepted ranges match the data the model was trained on.</li>
+          <li>Your assessments are private and visible only to you.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/predict.js') }}"></script>
+{% endblock %}

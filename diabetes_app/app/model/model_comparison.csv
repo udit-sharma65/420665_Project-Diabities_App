@@ -1,0 +1,6 @@
+Model,Accuracy,Precision,Recall,F1-score,ROC-AUC
+"SVM (Linear, calibrated)",0.9579,0.8495,0.6356,0.7272,0.9595
+XGBoost,0.9086,0.4902,0.8974,0.634,0.9764
+Random Forest,0.9093,0.4922,0.888,0.6333,0.9744
+Decision Tree,0.8871,0.433,0.9045,0.5856,0.971
+Logistic Regression,0.8852,0.4266,0.8762,0.5739,0.9596

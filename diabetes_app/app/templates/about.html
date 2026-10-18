@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}About the model{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4">About the model</h1>
+
+<div class="row g-4 mb-4">
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-header bg-white"><strong>Selected model</strong></div>
+      <div class="card-body">
+        <p class="mb-3">{{ meta.model_name }}</p>
+        <div class="row text-center g-2">
+          <div class="col-6 col-md-4"><div class="metric"><div class="metric-value">{{ (meta.metrics.accuracy * 100)|round(1) }}%</div><div class="metric-label">Accuracy</div></div></div>
+          <div class="col-6 col-md-4"><div class="metric"><div class="metric-value">{{ (meta.metrics.precision * 100)|round(1) }}%</div><div class="metric-label">Precision</div></div></div>
+          <div class="col-6 col-md-4"><div class="metric"><div class="metric-value">{{ (meta.metrics.recall * 100)|round(1) }}%</div><div class="metric-label">Recall</div></div></div>
+          <div class="col-6 col-md-4"><div class="metric"><div class="metric-value">{{ (meta.metrics.f1_score * 100)|round(1) }}%</div><div class="metric-label">F1-score</div></div></div>
+          <div class="col-6 col-md-4"><div class="metric"><div class="metric-value">{{ (meta.metrics.roc_auc * 100)|round(1) }}%</div><div class="metric-label">ROC-AUC</div></div></div>
+        </div>
+        <p class="small text-muted mt-3 mb-0">
+          Trained on {{ "{:,}".format(meta.training_rows) }} records and tested on {{ "{:,}".format(meta.test_rows) }} unseen records.
+          Risk levels: Low below {{ (meta.risk_bands.low_below * 100)|round|int }}%, High from {{ (meta.risk_bands.high_from * 100)|round|int }}%.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-header bg-white"><strong>What influences the prediction</strong></div>
+      <div class="card-body">
+        {% for row in importance %}
+        <div class="mb-2">
+          <div class="d-flex justify-content-between small"><span>{{ row.feature }}</span><span class="text-muted">{{ '%.3f'|format(row.importance) }}</span></div>
+          <div class="progress" role="progressbar" aria-label="{{ row.feature }}" style="height: 8px;"><div class="progress-bar" style="width: {{ row.width }}%"></div></div>
+        </div>
+        {% endfor %}
+        <p class="small text-muted mt-3 mb-0">Permutation importance measured as the drop in ROC-AUC when a feature is shuffled.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-header bg-white"><strong>Models compared</strong></div>
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1-score</th><th>ROC-AUC</th></tr></thead>
+      <tbody>
+        {% for row in comparison %}
+        <tr {% if row.model == meta.model_name %}class="table-primary"{% endif %}>
+          <td>{{ row.model }}</td>
+          <td>{{ '%.3f'|format(row.accuracy) }}</td>
+          <td>{{ '%.3f'|format(row.precision) }}</td>
+          <td>{{ '%.3f'|format(row.recall) }}</td>
+          <td>{{ '%.3f'|format(row.f1) }}</td>
+          <td>{{ '%.3f'|format(row.roc_auc) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white"><strong>Limitations</strong></div>
+  <div class="card-body">
+    <ul class="mb-0">
+      <li>The model was trained on an anonymised public dataset and has not been clinically validated.</li>
+      <li>HbA1c and blood glucose drive most of the prediction. Without them the model performs far worse.</li>
+      <li>Recall is {{ (meta.metrics.recall * 100)|round|int }}%, so some people who have diabetes will not be flagged. A low result does not rule out diabetes.</li>
+      <li>Inputs outside the training ranges are rejected because predictions there would be unreliable.</li>
+      <li>Results are a screening estimate only and never replace a doctor's diagnosis.</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

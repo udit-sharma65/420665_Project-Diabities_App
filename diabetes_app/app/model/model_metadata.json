@@ -1,0 +1,69 @@
+{
+  "model_name": "SVM (Linear, calibrated)",
+  "tuned": true,
+  "sklearn_version": "1.6.1",
+  "feature_order": [
+    "gender",
+    "age",
+    "hypertension",
+    "heart_disease",
+    "smoking_history",
+    "bmi",
+    "HbA1c_level",
+    "blood_glucose_level"
+  ],
+  "categorical_values": {
+    "gender": [
+      "Female",
+      "Male"
+    ],
+    "smoking_history": [
+      "No Info",
+      "current",
+      "ever",
+      "former",
+      "never",
+      "not current"
+    ]
+  },
+  "binary_features": [
+    "hypertension",
+    "heart_disease"
+  ],
+  "numeric_ranges": {
+    "age": {
+      "min": 0.08,
+      "max": 80.0
+    },
+    "bmi": {
+      "min": 10.01,
+      "max": 95.69
+    },
+    "HbA1c_level": {
+      "min": 3.5,
+      "max": 9.0
+    },
+    "blood_glucose_level": {
+      "min": 80.0,
+      "max": 300.0
+    }
+  },
+  "threshold": 0.5,
+  "risk_bands": {
+    "low_below": 0.3,
+    "high_from": 0.6
+  },
+  "metrics": {
+    "accuracy": 0.958,
+    "precision": 0.8502,
+    "recall": 0.6356,
+    "f1_score": 0.7274,
+    "roc_auc": 0.9595
+  },
+  "training_rows": 76902,
+  "test_rows": 19226,
+  "target_labels": {
+    "0": "No diabetes",
+    "1": "Diabetes"
+  }
+}

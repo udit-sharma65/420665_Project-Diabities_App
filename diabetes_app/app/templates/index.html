@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero text-center text-lg-start rounded-4 p-4 p-lg-5 mb-5">
+  <div class="row align-items-center">
+    <div class="col-lg-7">
+      <h1 class="display-5 fw-bold">Check your diabetes risk in under a minute</h1>
+      <p class="lead mt-3">Enter a few health details and get an instant risk estimate from a trained machine learning model, together with practical recommendations.</p>
+      <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start mt-4">
+        <a class="btn btn-primary btn-lg" href="{{ url_for('auth.register') }}">Create a free account</a>
+        <a class="btn btn-outline-secondary btn-lg" href="{{ url_for('auth.login') }}">Log in</a>
+      </div>
+    </div>
+    <div class="col-lg-5 d-none d-lg-block">
+      <div class="hero-card p-4 rounded-4">
+        <div class="small text-uppercase text-muted">Sample result</div>
+        <div class="display-4 fw-bold text-danger">78%</div>
+        <div class="fw-semibold">High risk</div>
+        <div class="progress mt-3" role="progressbar" aria-label="Sample risk"><div class="progress-bar bg-danger" style="width: 78%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row g-4 mb-5">
+  <div class="col-md-4">
+    <div class="card h-100 border-0 shadow-sm"><div class="card-body">
+      <h2 class="h5">1. Enter your details</h2>
+      <p class="text-muted mb-0">Age, BMI, HbA1c, blood glucose, smoking history and existing conditions.</p>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 border-0 shadow-sm"><div class="card-body">
+      <h2 class="h5">2. Get your risk level</h2>
+      <p class="text-muted mb-0">A calibrated machine learning model returns a probability and a Low, Moderate or High risk level.</p>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 border-0 shadow-sm"><div class="card-body">
+      <h2 class="h5">3. Follow the guidance</h2>
+      <p class="text-muted mb-0">Receive tailored medical follow-up, lifestyle and monitoring suggestions and keep a private history.</p>
+    </div></div>
+  </div>
+</section>
+
+<div class="alert alert-secondary mb-0">
+  This tool is a screening aid for educational purposes and is not a substitute for professional medical advice or testing.
+</div>
+{% endblock %}
